@@ -1,8 +1,6 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 const config = {
     BOT_TOKEN: "",
+    apikey: "" // get on https://night-api.com/
 };
 
 export default config;
