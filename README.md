@@ -16,7 +16,7 @@
 ## การติดตั้ง
 1. โคลนโปรเจค:
    ```
-   git clone <repository-url>
+   git clone https://github.com/KCCHDEV/DiscordBot-randomP-image
    ```
 
 2. ติดตั้ง dependencies:
