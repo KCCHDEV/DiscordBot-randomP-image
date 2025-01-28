@@ -1,51 +1,85 @@
-# README.md
+# Discord Bot - Random Image Sender
 
-# Discord Bot
+## คำอธิบาย
+บอทดิสคอร์ดสำหรับส่งรูปภาพอัตโนมัติไปยังหลายห้องแชทพร้อมกัน พัฒนาด้วย TypeScript และ Discord.js
 
-This project is a Discord bot built with TypeScript. It includes various commands and event handlers to interact with users on Discord.
+## คุณสมบัติ
+- ส่งรูปภาพอัตโนมัติตามเวลาที่กำหนด
+- รองรับการส่งไปยังหลายเซิร์ฟเวอร์และหลายช่องแชท
+- ระบบแคชรูปภาพเพื่อป้องกันการส่งซ้ำ
+- ระบบดาวน์โหลดรูปภาพอัตโนมัติ
+- คำสั่งจัดการระบบที่ใช้งานง่าย
 
-## Features
-
-- Responds to commands like `!ping` and `!help`.
-- Logs messages when the bot is ready.
-- Processes incoming messages and executes commands.
-
-## Setup
-
-1. Clone the repository:
+## การติดตั้ง
+1. โคลนโปรเจค:
    ```
    git clone <repository-url>
    ```
 
-2. Navigate to the project directory:
-   ```
-   cd discord-bot
-   ```
-
-3. Install the dependencies:
+2. ติดตั้ง dependencies:
    ```
    npm install
    ```
 
-4. Create a `.env` file in the root directory and add your bot token:
-   ```
-   DISCORD_TOKEN=your_token_here
-   ```
+3. ตั้งค่าในไฟล์ config.ts:
+   - BOT_TOKEN: โทเค็นของบอท
+   - apikey: API key จาก night-api.com
+   - delay: ระยะเวลาระหว่างการส่งรูป (มิลลิวินาที)
+   - channels: รายการช่องที่ต้องการส่งรูป
 
-5. Run the bot:
+4. รันบอท:
    ```
    npm start
    ```
 
-## Commands
+## คำสั่งที่ใช้งานได้
 
-- `!ping`: Responds with "Pong!".
-- `!help`: Lists available commands.
+### การจัดการช่องทาง
+- `!addchannel` - เพิ่มช่องปัจจุบันเข้าไปในรายการส่งรูป
+- `!removechannel` - ลบช่องปัจจุบันออกจากรายการส่งรูป
+- `!listchannels` - แสดงรายการช่องทั้งหมดที่บอทส่งรูป
 
-## Contributing
+### ระบบแคช
+- `!cache status` - แสดงสถานะระบบแคช
+- `!cache on` - เปิดระบบแคช
+- `!cache off` - ปิดระบบแคช
+- `!cache clear` - ล้างแคชทั้งหมด
 
-Feel free to submit issues or pull requests for improvements or new features. 
+### ระบบดาวน์โหลด
+- `!download status` - แสดงสถานะระบบดาวน์โหลด
+- `!download on` - เปิดระบบดาวน์โหลด
+- `!download off` - ปิดระบบดาวน์โหลด
+- `!downloads` - แสดงจำนวนไฟล์ที่ดาวน์โหลด
+
+## การตั้งค่าที่แนะนำ
+1. delay: 
+   - ค่าที่แนะนำ: 5000-10000 ms (5-10 วินาที)
+   - ถ้าต้องการประหยัด API: 30000 ms (30 วินาที)
+
+2. maxCacheSize:
+   - ค่าที่แนะนำ: 1000-5000 รูป
+   - ขึ้นอยู่กับพื้นที่เก็บข้อมูลที่มี
+
+## การแก้ปัญหาเบื้องต้น
+1. บอทไม่ส่งรูป
+   - ตรวจสอบ API key
+   - ตรวจสอบการตั้งค่า channel ID
+   - เช็คสิทธิ์ของบอทในช่องนั้นๆ
+
+2. รูปซ้ำบ่อย
+   - เพิ่มค่า maxCacheSize
+   - เปิดระบบแคช
+   - ลดความถี่ในการส่ง (เพิ่มค่า delay)
+
+## ข้อควรระวัง
+- ควรตั้งค่า delay ให้เหมาะสมเพื่อไม่ให้เกิน API rate limit
+- ตรวจสอบสิทธิ์ของบอทในแต่ละช่องให้ครบถ้วน
+- ระวังการใช้พื้นที่จัดเก็บเมื่อเปิดระบบดาวน์โหลด
+
+## ช่องทางติดต่อ/รายงานปัญหา
+- สร้าง Issue ใน GitHub
+- Discord: https://discord.gg/m8ER6ZWvT5
+- Email: [Your Email]
 
 ## License
-
-This project is licensed under the MIT License.
+MIT License - ใช้งานได้ฟรี ดัดแปลงได้ตามต้องการ
