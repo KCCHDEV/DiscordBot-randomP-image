@@ -1,5 +1,8 @@
-# Discord Bot - Random Image Sender
-
+# Discord Bot - Random Image Sender (NSFW / SFW)
+- ตอนนี้ตั้งเป็น api Random NSFW ระวังด้วยแก้ได้ที่ index.ts
+```ts
+        const response = await api.nsfw.fetchImage();
+```
 ## คำอธิบาย
 บอทดิสคอร์ดสำหรับส่งรูปภาพอัตโนมัติไปยังหลายห้องแชทพร้อมกัน พัฒนาด้วย TypeScript และ Discord.js
 
