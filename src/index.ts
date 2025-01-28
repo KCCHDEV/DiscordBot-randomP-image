@@ -1,9 +1,9 @@
-import { Client, GatewayIntentBits, Message } from 'discord.js';
+import { Client, GatewayIntentBits, Message, TextChannel } from 'discord.js';
 import config from './config';
 import { NightAPI } from "night-api";
 import { ImageCache } from './utils/imageCache';
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 const api = new NightAPI(config.apikey);
@@ -30,6 +30,19 @@ client.once('ready', async () => {
         const image = await fetchNewImage();
         if (image) {
             console.log('New unique image:', image);
+            for (const channelConfig of config.channels) {
+                try {
+                    const guild = client.guilds.cache.get(channelConfig.serverId);
+                    if (!guild) continue;
+                    
+                    const channel = guild.channels.cache.get(channelConfig.channelId) as TextChannel;
+                    if (channel) {
+                        await channel.send(image.content.url);
+                    }
+                } catch (error) {
+                    console.error(`Failed to send to channel ${channelConfig.channelId}:`, error);
+                }
+            }
         } else {
             console.log('No new unique images found after max attempts');
         }
@@ -84,6 +97,54 @@ client.on('messageCreate', async (message: Message) => {
     if (message.content === '!download off') {
         imageCache.downloader.setEnabled(false);
         message.reply('Download disabled');
+    }
+
+    if (message.content.startsWith('!addchannel')) {
+        if (!message.member?.permissions.has('Administrator')) {
+            return message.reply('You need administrator permissions to use this command.');
+        }
+        
+        const serverId = message.guildId;
+        if (!serverId) {
+            return message.reply('This command can only be used in servers.');
+        }
+        const channelId = message.channelId;
+        
+        if (!config.channels.some(c => c.channelId === channelId)) {
+            config.channels.push({ serverId, channelId });
+            message.reply('Channel added to image distribution list!');
+        } else {
+            message.reply('This channel is already in the distribution list!');
+        }
+    }
+
+    if (message.content.startsWith('!removechannel')) {
+        if (!message.member?.permissions.has('Administrator')) {
+            return message.reply('You need administrator permissions to use this command.');
+        }
+        
+        const channelId = message.channelId;
+        const index = config.channels.findIndex(c => c.channelId === channelId);
+        
+        if (index !== -1) {
+            config.channels.splice(index, 1);
+            message.reply('Channel removed from image distribution list!');
+        } else {
+            message.reply('This channel is not in the distribution list!');
+        }
+    }
+
+    if (message.content === '!listchannels') {
+        if (!message.member?.permissions.has('Administrator')) {
+            return message.reply('You need administrator permissions to use this command.');
+        }
+        
+        const channelList = config.channels.map(c => 
+            `Server: ${client.guilds.cache.get(c.serverId)?.name || 'Unknown'} (${c.serverId})\n` +
+            `Channel: ${client.channels.cache.get(c.channelId)?.toString() || 'Unknown'}`
+        ).join('\n\n');
+        
+        message.reply(channelList || 'No channels configured');
     }
 });
 
