@@ -79,7 +79,7 @@
 ## ช่องทางติดต่อ/รายงานปัญหา
 - สร้าง Issue ใน GitHub
 - Discord: https://discord.gg/m8ER6ZWvT5
-- Email: [Your Email]
+- Email: -
 
 ## License
 MIT License - ใช้งานได้ฟรี ดัดแปลงได้ตามต้องการ
