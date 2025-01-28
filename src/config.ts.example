@@ -1,6 +1,13 @@
 const config = {
     BOT_TOKEN: "",
-    apikey: "" // get on https://night-api.com/
+    apikey: "", // get on https://night-api.com/
+    delay: 5000, // 5 seconds pre image
+    useCache: false, // toggle cache functionality
+    maxCacheSize: 1000, // maximum number of cached images
+    useDownload: false, // toggle download functionality
+    channels: [
+        { serverId: '', channelId: '' }, // Add your server and channel IDs here
+    ],
 };
 
 export default config;
